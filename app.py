@@ -1,29 +1,34 @@
 import dash
 import numpy as np
 import pandas as pd
-import plotly.graph_objs as go
 from dash import dcc, html
-from flask import Flask
+import plotly.express as px
 
-def figure_1():
-    layout=go.Layout(title='Title',)
-    fig=go.Figure(data=[go.Bar(go.Bar(y=[2, 1, 3]))],layout=layout)
-    return fig
+df = px.data.iris()
+# Create the chart:
+fig = px.parallel_coordinates(
+    df, 
+    color="species_id", 
+    labels={"species_id": "Species","sepal_width": "Sepal Width", "sepal_length": "Sepal Length", "petal_width": "Petal Width", "petal_length": "Petal Length", },
+    color_continuous_scale=px.colors.diverging.Tealrose,
+    color_continuous_midpoint=2)
 
-server = Flask(__name__)
+# Hide the color scale that is useless in this case
 
-app = dash.Dash(name =__name__, server=server)
+app = dash.Dash(__name__)
+server = app.server
+
 app.layout = html.Div(children=[
-    html.H1(children='Demo',
+    html.H1(children='Demo of Iris Dataset',
             style={'textAlign': 'center'}
     ),
 
     html.Div(children='''
-        Demo testing cloud app
+        This is a dash + plotly + python on Heroku cloud platform demo.
     '''),
-
-    dcc.Graph(
-        id='total-indus',
-        figure=figure_1()
-    ),
+    dcc.Graph(figure = fig, id = 'scatter')
 ])
+
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
