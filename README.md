@@ -1,2 +1,2 @@
-# dash-px
-Simple Dash app using Plotly Express
+# Deploy Python Dash Plotly on Heroku
+A template for Python Dash Plotly on Heroku cloud platform
